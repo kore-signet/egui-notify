@@ -1,5 +1,5 @@
 use crate::{Anchor, TOAST_HEIGHT, TOAST_WIDTH};
-use egui::{pos2, vec2, Color32, Pos2, Rect, WidgetText};
+use egui::{pos2, vec2, Color32, Id, Pos2, Rect, WidgetText};
 use std::{fmt::Debug, time::Duration};
 
 /// Level of importance
@@ -60,6 +60,7 @@ pub struct ToastOptions {
 
 /// Single notification or *toast*
 pub struct Toast {
+    pub(crate) id: Option<Id>,
     pub(crate) level: ToastLevel,
     pub(crate) caption: WidgetText,
     // (initial, current)
@@ -91,6 +92,7 @@ fn duration_to_seconds_f32(duration: Duration) -> f32 {
 impl Toast {
     fn new(caption: impl Into<WidgetText>, options: ToastOptions) -> Self {
         Self {
+            id: None,
             caption: caption.into(),
             height: TOAST_HEIGHT,
             width: TOAST_WIDTH,
@@ -172,6 +174,11 @@ impl Toast {
         self.closable(options.closable);
         self.duration(options.duration);
         self.level(options.level);
+        self
+    }
+
+    pub fn id(&mut self, id: Id) -> &mut Self {
+        self.id = Some(id);
         self
     }
 
