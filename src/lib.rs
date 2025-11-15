@@ -104,7 +104,14 @@ impl Toasts {
 
     /// Dismisses one toast by id.
     pub fn dismiss_toast_by_id(&mut self, id: Id) {
-        self.toasts.retain_mut(|toast| toast.id.is_none_or(|oid| oid != id))
+        self.toasts
+            .retain_mut(|toast| toast.id.is_none_or(|oid| oid != id))
+    }
+
+    pub fn get_toast_by_id(&mut self, id: Id) -> Option<&mut Toast> {
+        self.toasts
+            .iter_mut()
+            .find(|v| v.id.is_some_and(|oid| oid == id))
     }
 
     /// Returns the number of toast items.
